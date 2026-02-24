@@ -36,4 +36,8 @@ public class BoardService {
 
         return BoardDto.RegRes.from(board);
     }
+
+    public void delete(Long idx) {
+        boardRepository.deleteById(idx);
+    }
 }
