@@ -35,7 +35,7 @@ public class UserController {
         AuthUserDetails user = (AuthUserDetails) authentication.getPrincipal();
 
         if(user != null) {
-            String jwt = JwtUtil.createToken(user.getIdx(), user.getUsername(), "ROLE_USER");
+            String jwt = JwtUtil.createToken(user.getIdx(), user.getUsername(), user.getRole());
             return ResponseEntity.ok().header("Set-Cookie", "ATOKEN=" + jwt + "; Path=/").build();
         }
 
