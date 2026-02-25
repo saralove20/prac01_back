@@ -7,6 +7,7 @@ import lombok.*;
 import java.util.List;
 
 public class BoardDto {
+    // 게시글 작성 요청
     @Getter
     public static class RegReq {
         private String title;
@@ -20,6 +21,7 @@ public class BoardDto {
         }
     }
 
+    // 게시글 작성 응답
     @Builder
     @Getter
     public static class RegRes {
@@ -36,6 +38,7 @@ public class BoardDto {
         }
     }
 
+    // 게시글 목록 조회 응답
     @Builder
     @Getter
     public static class ListRes {
@@ -43,6 +46,7 @@ public class BoardDto {
         private String title;
         private String writer;
         private Integer replyCount;
+        private Integer likesCount;
 
         public static ListRes from(Board entity) {
             return ListRes.builder()
@@ -50,15 +54,19 @@ public class BoardDto {
                     .title(entity.getTitle())
                     .writer(entity.getUser().getName())
                     .replyCount(entity.getReplyList().size())
+                    .likesCount(entity.getLikesList().size())
                     .build();
         }
     }
 
+
+    // 게시글 상세 조회 응답
     @JsonPropertyOrder({
             "idx",
             "title",
             "contents",
             "writer",
+            "likesCount",
             "replies"
     })
     @Builder
@@ -68,6 +76,7 @@ public class BoardDto {
         private String title;
         private String contents;
         private String writer;
+        private Integer likesCount;
         private List<ReplyDto.ReplyListRes> replies;
 
         public static ReadRes from(Board entity) {
@@ -76,6 +85,7 @@ public class BoardDto {
                     .title(entity.getTitle())
                     .contents(entity.getContents())
                     .writer(entity.getUser().getName())
+                    .likesCount(entity.getLikesList().size())
                     .replies(entity.getReplyList().stream().map(ReplyDto.ReplyListRes::from).toList())
                     .build();
         }
