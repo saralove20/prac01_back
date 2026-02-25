@@ -63,7 +63,7 @@ public class SecurityConfig {
                 (auth) -> auth
                         .requestMatchers("/user/login", "/user/signup", "/user/verify").permitAll()
                         .requestMatchers("/board/reg").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
         );
 
         http.csrf(AbstractHttpConfigurer::disable);
