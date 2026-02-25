@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.common.model.BaseResponse;
 import com.example.demo.user.model.AuthUserDetails;
 import com.example.demo.user.model.UserDto;
 import com.example.demo.utils.JwtUtil;
@@ -26,7 +27,7 @@ public class UserController {
     public ResponseEntity signup(@RequestBody UserDto.SignupReq dto) {
         UserDto.SignupRes result =  userService.signup(dto);
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(BaseResponse.success(result));
     }
 
 
