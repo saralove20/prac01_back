@@ -1,6 +1,10 @@
 package com.example.demo.board.model;
 
+import com.example.demo.reply.model.ReplyDto;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
+
+import java.util.List;
 
 public class BoardDto {
     @Getter
@@ -38,16 +42,25 @@ public class BoardDto {
         private Long idx;
         private String title;
         private String writer;
+        private Integer replyCount;
 
         public static ListRes from(Board entity) {
             return ListRes.builder()
                     .idx(entity.getIdx())
                     .title(entity.getTitle())
                     .writer(entity.getUser().getName())
+                    .replyCount(entity.getReplyList().size())
                     .build();
         }
     }
 
+    @JsonPropertyOrder({
+            "idx",
+            "title",
+            "contents",
+            "writer",
+            "replies"
+    })
     @Builder
     @Getter
     public static class ReadRes {
@@ -55,6 +68,7 @@ public class BoardDto {
         private String title;
         private String contents;
         private String writer;
+        private List<ReplyDto.ReplyListRes> replies;
 
         public static ReadRes from(Board entity) {
             return ReadRes.builder()
@@ -62,6 +76,7 @@ public class BoardDto {
                     .title(entity.getTitle())
                     .contents(entity.getContents())
                     .writer(entity.getUser().getName())
+                    .replies(entity.getReplyList().stream().map(ReplyDto.ReplyListRes::from).toList())
                     .build();
         }
     }
