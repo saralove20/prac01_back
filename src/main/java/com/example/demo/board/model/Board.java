@@ -1,26 +1,39 @@
 package com.example.demo.board.model;
 
 import com.example.demo.common.model.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.demo.relation.model.A;
+import com.example.demo.relation.model.B;
+import com.example.demo.reply.model.Reply;
+import com.example.demo.user.model.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Builder
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Board  extends BaseEntity {
+public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
     private String title;
     private String contents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_idx")
+    private User user;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY /* fetch = FetchType.EAGER*/)
+    private List<Reply> replyList;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY /* fetch = FetchType.EAGER*/)
+    private List<Likes> likesList;
 
     public void update(BoardDto.RegReq dto) {
         this.title = dto.getTitle();
