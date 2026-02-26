@@ -2,9 +2,19 @@ jwt:
   secret: ${JWT_SECRET}
   expire: ${JWT_EXPIRE}
 
+project:
+  upload:
+    path: ${UPLOAD_PATH}
+
 spring:
   application:
     name: spring04
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   mail:
     host: smtp.gmail.com
     port: 587
