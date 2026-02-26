@@ -2,8 +2,10 @@ package com.example.demo.reply;
 
 import com.example.demo.common.model.BaseResponse;
 import com.example.demo.reply.model.ReplyDto;
+import com.example.demo.user.model.AuthUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyController {
     private final ReplyService replyService;
+
+    @PostMapping("/register/{boardIdx}")
+    public ResponseEntity register(@AuthenticationPrincipal AuthUserDetails user, @PathVariable Long boardIdx) {
+        System.out.println(user);
+        return ResponseEntity.ok(BaseResponse.success("성공"));
+    }
+
 
     @GetMapping("/{idx}")
     public ResponseEntity read(@PathVariable Long idx) {
