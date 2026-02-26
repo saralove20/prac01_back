@@ -25,7 +25,6 @@ public class UploadController {
     // 컴포넌트 객체에 @Primary를 달아두면 해당 객체가 주입된다.
     // @Qualifier(value = "cloudUploadService")
     private final UploadService uploadService;
-    private final BoardService boardService;
 
     @PostMapping("/image")
     public ResponseEntity upload(List<MultipartFile> images) {
