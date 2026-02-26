@@ -1,6 +1,8 @@
 package com.example.demo.board.model;
 
 import com.example.demo.reply.model.ReplyDto;
+import com.example.demo.user.model.AuthUserDetails;
+import com.example.demo.user.model.User;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
 
@@ -13,10 +15,11 @@ public class BoardDto {
         private String title;
         private String contents;
 
-        public Board toEntity() {
+        public Board toEntity(User user) {
             return Board.builder()
                     .title(this.title)
                     .contents(this.contents)
+                    .user(user)
                     .build();
         }
     }
@@ -28,12 +31,14 @@ public class BoardDto {
         private Long idx;
         private String title;
         private String contents;
+        private String writer;
 
         public static RegRes from(Board entity) {
             return RegRes.builder()
                     .idx(entity.getIdx())
                     .title(entity.getTitle())
                     .contents(entity.getContents())
+                    .writer(entity.getUser().getName())
                     .build();
         }
     }
