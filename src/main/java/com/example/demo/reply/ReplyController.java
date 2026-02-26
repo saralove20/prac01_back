@@ -1,6 +1,8 @@
 package com.example.demo.reply;
 
+import com.example.demo.board.model.BoardDto;
 import com.example.demo.common.model.BaseResponse;
+import com.example.demo.reply.model.Reply;
 import com.example.demo.reply.model.ReplyDto;
 import com.example.demo.user.model.AuthUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,9 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @PostMapping("/register/{boardIdx}")
-    public ResponseEntity register(@AuthenticationPrincipal AuthUserDetails user, @PathVariable Long boardIdx) {
-        System.out.println(user);
-        return ResponseEntity.ok(BaseResponse.success("성공"));
+    public ResponseEntity register(@AuthenticationPrincipal AuthUserDetails user, @PathVariable Long boardIdx, @RequestBody ReplyDto.ReplyRegReq dto) {
+        ReplyDto.ReplyRegRes result = replyService.register(user.getIdx(), boardIdx, dto);
+        return ResponseEntity.ok(BaseResponse.success(result));
     }
 
 
