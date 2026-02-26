@@ -1,6 +1,7 @@
 package com.example.demo.relation.service;
 
 import com.example.demo.relation.model.B;
+import com.example.demo.relation.model.BDto;
 import com.example.demo.relation.repository.BRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,13 @@ import java.util.List;
 public class BService {
     private final BRepository bRepository;
 
+    public BDto.BRes reg(Long aIdx, BDto.BReq dto) {
+        B b = dto.toEntity(aIdx);
+        b = bRepository.save(b);
+
+        return BDto.BRes.from(b);
+    }
+
     public void read(Long idx) {
         B b = bRepository.findById(idx).orElseThrow();
 
@@ -21,9 +29,6 @@ public class BService {
 
         System.out.println(b.getA().getIdx());
         System.out.println(b.getA().getA01());
-
-
-
 
         System.out.println("");
     }
