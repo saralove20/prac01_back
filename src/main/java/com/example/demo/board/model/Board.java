@@ -1,8 +1,6 @@
 package com.example.demo.board.model;
 
 import com.example.demo.common.model.BaseEntity;
-import com.example.demo.relation.model.A;
-import com.example.demo.relation.model.B;
 import com.example.demo.reply.model.Reply;
 import com.example.demo.user.model.User;
 import jakarta.persistence.*;
@@ -22,6 +20,7 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+    @Column(nullable = false, length = 100)
     private String title;
     private String contents;
 
