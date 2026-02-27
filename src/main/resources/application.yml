@@ -2,9 +2,29 @@ jwt:
   secret: ${JWT_SECRET}
   expire: ${JWT_EXPIRE}
 
+project:
+  upload:
+    path: ${UPLOAD_PATH}
+
 spring:
   application:
     name: spring04
+
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+        bucket: java-architecture-practice
+      region:
+        static: ap-northeast-2
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   mail:
     host: smtp.gmail.com
     port: 587
