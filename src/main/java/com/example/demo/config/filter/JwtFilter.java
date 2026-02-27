@@ -1,11 +1,13 @@
 package com.example.demo.config.filter;
 
+import com.example.demo.user.model.AuthUserDetails;
 import com.example.demo.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,8 +18,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+    private final JwtUtil jwtUtil;
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
@@ -33,11 +38,18 @@ public class JwtFilter extends OncePerRequestFilter {
             for (Cookie cookie : request.getCookies()) {
                 if (cookie.getName().equals("ATOKEN")) {
                     // JwtUtil에서 토큰 생성 및 확인하도록 리팩토링
-                    String username = JwtUtil.getUsername(cookie.getValue());
-                    String role = JwtUtil.getRole(cookie.getValue());
+                    Long idx = jwtUtil.getUserIdx(cookie.getValue());
+                    String username = jwtUtil.getUsername(cookie.getValue());
+                    String role = jwtUtil.getRole(cookie.getValue());
+
+                    AuthUserDetails user = AuthUserDetails.builder()
+                            .idx(idx)
+                            .username(username)
+                            .role(role)
+                            .build();
 
                     Authentication authentication = new UsernamePasswordAuthenticationToken(
-                            username,
+                            user,
                             null,
                             List.of(new SimpleGrantedAuthority(role))
                     );
