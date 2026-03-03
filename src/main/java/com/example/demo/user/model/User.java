@@ -23,7 +23,7 @@ public class User {
     private String password;
     @Setter
     private boolean enable;
-    @ColumnDefault(value="ROLE_USER")
+    @ColumnDefault(value="'ROLE_USER'")
     private String role;
 
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY /* fetch = FetchType.EAGER*/)
