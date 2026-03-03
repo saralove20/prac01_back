@@ -35,6 +35,7 @@ public class AuthUserDetails implements UserDetails, OAuth2User {
                 .build();
     }
 
+    // OAuth2User 관련 오버라이드
     @Override
     public String getName() {
         return name;

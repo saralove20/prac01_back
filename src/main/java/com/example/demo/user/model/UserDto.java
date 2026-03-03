@@ -22,7 +22,7 @@ public class UserDto {
             String providerId = ((Long) attributes.get("id")).toString();
             System.out.println(providerId);
 
-            // 이메일 확인
+            // 받아온 정보 가공
             String email = providerId + "@kakao.social";
             Map properties = (Map) attributes.get("properties");
             String name = (String) properties.get("nickname");

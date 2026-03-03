@@ -43,7 +43,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
-    private final OAuth2UserService oAuth2UserService;
+    private final OAuth2UserService oAuth2UserService;      // 소셜 로그인 관련 Service 클래스
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
@@ -69,6 +69,7 @@ public class SecurityConfig {
                     endpoint.authorizationRequestRepository(oAuth2AuthorizationRequestRepository)
             );
 
+            // 사용자 정보를 받아오는 코드를 어떤 클래스에 짤건지 지정하는 부분 (우리는 OAuth2UserService 클래스 만들거임)
             config.userInfoEndpoint(
                     endpoint -> endpoint.userService(oAuth2UserService)
             );
