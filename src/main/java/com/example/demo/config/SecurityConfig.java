@@ -21,6 +21,9 @@ package com.example.demo.config;
 */
 
 import com.example.demo.config.filter.JwtFilter;
+import com.example.demo.config.oauth2.OAuth2AuthenticationSuccessHandler;
+import com.example.demo.config.oauth2.OAuth2AuthorizationRequestRepository;
+import com.example.demo.user.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,28 +32,25 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
+    private final OAuth2UserService oAuth2UserService;      // 소셜 로그인 관련 Service 클래스
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthorizationRequestRepository oAuth2AuthorizationRequestRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -59,6 +59,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        // 스프링 시큐리티 기본 세션 로그인 방식 꺼주기 (근데 이제 소셜 로그인 방식에서 끄는게 아니라 일반 로그인 방식에서만 꺼짐)
+        http.sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));    // 상태 저장할 필요 없다는 뜻
+
+        http.oauth2Login(config -> {
+            config.authorizationEndpoint(endpoint ->
+                    endpoint.authorizationRequestRepository(oAuth2AuthorizationRequestRepository)
+            );
+
+            // 사용자 정보를 받아오는 코드를 어떤 클래스에 짤건지 지정하는 부분 (우리는 OAuth2UserService 클래스 만들거임)
+            config.userInfoEndpoint(
+                    endpoint -> endpoint.userService(oAuth2UserService)
+            );
+            config.successHandler(oAuth2AuthenticationSuccessHandler); // 성공 했을 때 처리할 클래스
+        });
+
         http.authorizeHttpRequests(
                 (auth) -> auth
                         .requestMatchers("/user/login", "/user/signup", "/user/verify").permitAll()
