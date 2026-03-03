@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class UserDto {
 
@@ -19,13 +20,22 @@ public class UserDto {
         private String role;
 
         public static OAuth from(Map<String, Object> attributes, String provider) {
-            String providerId = ((Long) attributes.get("id")).toString();
-            System.out.println(providerId);
+            String providerId = null;
+            String email = null;
+            Map properties = null;
+            String name = null;
 
-            // 받아온 정보 가공
-            String email = providerId + "@kakao.social";
-            Map properties = (Map) attributes.get("properties");
-            String name = (String) properties.get("nickname");
+            if (provider.equals("kakao")) {
+                providerId = ((Long) attributes.get("id")).toString();
+                // 받아온 정보 가공
+                email = providerId + "@kakao.social";
+                properties = (Map) attributes.get("properties");
+                name = (String) properties.get("nickname");
+
+            } else if (provider.equals("google")) {
+                email = attributes.get("email").toString();
+                name = attributes.get("name").toString();
+            }
 
             return OAuth.builder()
                     .email(email)
@@ -43,6 +53,7 @@ public class UserDto {
                     .password(this.provider)
                     .enable(this.enable)
                     .role(this.role)
+                    .provider(provider)
                     .build();
         }
     }
