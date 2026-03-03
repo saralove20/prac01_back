@@ -28,7 +28,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         // 카카오 로그인 실패하면 어차피 여기로 코드가 안타짐 (그래서 밑에 코드가 로그인 성공 로직이라고 생각하면 됨)
         OAuth2User oAuth2User = super.loadUser(userRequest);    // 부모 클래스에 있던 메소드 그대로 실행
 
-        // 정보 가져오기 (나중에 DTO로 바꿀 것)
+        // 정보 가져오기
         UserDto.OAuth dto = UserDto.OAuth.from(oAuth2User.getAttributes(), provider);
 
         // DB에 회원이 있나 없나 확인

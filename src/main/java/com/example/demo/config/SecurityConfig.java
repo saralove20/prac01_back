@@ -52,7 +52,6 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -60,9 +59,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        // 스프링 시큐리티 기본 세션 로그인 방식 꺼주기
+        // 스프링 시큐리티 기본 세션 로그인 방식 꺼주기 (근데 이제 소셜 로그인 방식에서 끄는게 아니라 일반 로그인 방식에서만 꺼짐)
         http.sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));    // 상태 저장할 필요 없다는 뜻
 
         http.oauth2Login(config -> {
             config.authorizationEndpoint(endpoint ->
