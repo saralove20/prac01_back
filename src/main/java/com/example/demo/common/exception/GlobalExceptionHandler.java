@@ -1,5 +1,6 @@
-package com.example.demo.common.exception;
+package org.example.board_core.common.exception;
 
+import com.example.demo.common.exception.BaseException;
 import com.example.demo.common.model.BaseResponse;
 import com.example.demo.common.model.BaseResponseStatus;
 import org.springframework.http.HttpStatus;
