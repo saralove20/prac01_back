@@ -1,10 +1,12 @@
 package com.example.demo.aop;
 
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +14,9 @@ import java.lang.reflect.Method;
 
 @Aspect     // 관점 : 흩어진 관심사를 하나로 묶은 것
 @Component
+@RequiredArgsConstructor
 public class SimpleAop {
+    private final Tracer tracer;
 
     // 실행될 위치나 시점을 지정 (아래는 위치를 지정함)
     //      * 리턴 타입 (모든 리턴 타입 해당)
@@ -21,6 +25,24 @@ public class SimpleAop {
     @Pointcut("execution(* com.example.demo.board..*.*(..))")
     private void cut() {    // 포인트 컷을 적용할 이름을 설정, 실제 실행되는 메소드는 아님, 위의 어노테이션을 매번 쓰는게 번거로우니까 cut이라는 이름으로 쓰고 싶어서 만든 메소드
         System.out.println("컷");
+    }
+
+    @Around("cut()")
+    public Object traceMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+        String methodName = joinPoint.getSignature().getName();
+        String className = joinPoint.getSignature().getDeclaringType().getSimpleName();
+
+        Span span = tracer.spanBuilder(className + "." + methodName).startSpan();
+        try (Scope scope = span.makeCurrent()) {
+            span.setAttribute("method.name", methodName);
+
+            return joinPoint.proceed();
+        } catch (Exception e) {
+            span.recordException(e);
+            throw e;
+        } finally {
+            span.end();
+        }
     }
 
     // 메소드가 실행될 때, 끝날 때를 지정하고 싶으면? -> 어노테이션 사용
