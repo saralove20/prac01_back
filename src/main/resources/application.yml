@@ -10,6 +10,17 @@ project:
     key: aessecretkey01234567890123456789
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
   tracing:
     sampling:
       probability: 1.0  # 모든 요청에 대한 데이터를 수집하겠다
