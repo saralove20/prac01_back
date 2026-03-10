@@ -1,3 +1,8 @@
+# cqrs 프로젝트에서 로그인 해서 토큰 받으려고 잠깐 포트번호 설정
+# 다 하면 지워주기
+server:
+  port: 8083
+
 jwt:
   secret: ${JWT_SECRET}
   expire: ${JWT_EXPIRE}
