@@ -12,7 +12,8 @@ import java.util.List;
 
 public class BoardDto {
     // 게시글 작성 요청
-    @Setter // TDD 때문에 달음, User 엔티티를 불변 객체로 만들려고 안달고 싶긴 한데...
+    @Setter // TDD 때문에 달음, User 엔티티를 불변 객체로 만들려고 안달고 싶긴 한데... (단위 테스트)
+    @AllArgsConstructor // TDD 때문에 달음 (통합 테스트)
     @Getter
     public static class RegReq {
         @Schema(description = "제목, 제목은 50글자까지만 입력 가능합니다.", required = true, example = "제목01")
