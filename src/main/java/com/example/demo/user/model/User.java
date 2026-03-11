@@ -1,11 +1,13 @@
 package com.example.demo.user.model;
 
 import com.example.demo.board.model.Board;
-import com.example.demo.relation.model.B;
+import com.example.demo.likes.model.Likes;
+import com.example.demo.reply.model.Reply;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -20,13 +22,15 @@ public class User {
     private String email;
     private String name;
     @Setter
+
     private String password;
     @Setter
     private boolean enable;
+
     @ColumnDefault(value="'ROLE_USER'")
     private String role;
     private String provider;
 
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY /* fetch = FetchType.EAGER*/)
-//    private List<Board> boardList;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    List<Likes> likesList;
 }
