@@ -60,11 +60,5 @@ public class BoardController {
         boardService.delete(idx);
         return ResponseEntity.ok(BaseResponse.success("성공"));
     }
-
-    // 게시글 좋아요 기능
-    @PostMapping("/{idx}/likes")
-    public ResponseEntity addLike(@PathVariable Long idx, @RequestBody Long userIdx) {
-        boardService.addLike(idx, userIdx);
-        return ResponseEntity.ok(BaseResponse.success("성공"));    }
 }
 

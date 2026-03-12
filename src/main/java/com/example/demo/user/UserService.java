@@ -35,7 +35,8 @@ public class UserService implements UserDetailsService {
 
         User user = dto.toEntity();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        userRepository.save(user);
+        // userRepository.save(user);
+        user = userRepository.save(user);   // TDD를 하면서 이렇게 고침
 
         // 메일 전송
         String uuid = UUID.randomUUID().toString();

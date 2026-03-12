@@ -1,9 +1,7 @@
 package com.example.demo.board;
 
 import com.example.demo.board.model.Board;
-import com.example.demo.board.model.Likes;
 import com.example.demo.user.UserRepository;
-import com.example.demo.user.model.AuthUserDetails;
 import com.example.demo.user.model.User;
 import lombok.RequiredArgsConstructor;
 import com.example.demo.board.model.BoardDto;
@@ -11,13 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
-    private final LikesRepository likesRepository;
     private final UserRepository userRepository;
 
     // 게시글 작성
@@ -57,18 +52,5 @@ public class BoardService {
     // 게시글 삭제
     public void delete(Long idx) {
         boardRepository.deleteById(idx);
-    }
-
-    // 게시글 좋아요 기능
-    public void addLike(Long idx, Long userIdx) {
-        Board board = boardRepository.findById(idx).orElseThrow();
-        User user = userRepository.findById(userIdx).orElseThrow();
-
-        Likes likes = Likes.builder()
-                .board(board)
-                .user(user)
-                .build();
-
-        likesRepository.save(likes);
     }
 }

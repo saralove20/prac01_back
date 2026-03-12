@@ -82,4 +82,13 @@ public class AuthUserDetails implements UserDetails, OAuth2User {
         return true;
     }
 
+    public User toEntity() {
+        return User.builder()
+                .idx(this.idx)
+                .email(this.username)
+                .password(this.password)
+                .enable(this.enable)
+                .role(this.role)
+                .build();
+    }
 }
